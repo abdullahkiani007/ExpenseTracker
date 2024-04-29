@@ -1,0 +1,17 @@
+
+{
+    "tasks": [
+    {
+      "title": "Groceries savemart",
+      "amount": 1000,
+      "Date": "May 16,2023",
+      "Time": "1:29 PM"
+    },{
+      "title": "Sports Equipment",
+      "amount": 200,
+      "Date": "May 20,2023",
+      "Time": "2:29 PM"
+    }
+  ]
+}
+
