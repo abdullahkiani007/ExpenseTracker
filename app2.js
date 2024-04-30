@@ -1,4 +1,5 @@
-import React, { useState , useEffect} from "react";
+// Import necessary components and modules from React Native
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,16 +12,13 @@ import {
   Alert
 } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-import Expense from "./components/Expense";
+import Expense from "./components/Expense"; // Import Expense component
 
-import data from "./expense.json";
-
-
-
-
-// App Component
+// Define the main App component
 const App = () => {
+  // Initialize state variables using useState hook
   const colorScheme = Appearance.getColorScheme();
+  
   const [isdark, setIsDark] = useState(false);
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -30,44 +28,29 @@ const App = () => {
   const [expenseData, setExpenseData] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
 
-
+  // Function to handle edit operation for expense
   const handleEdit = (index) => {
-    // yfwbzhctl
-    // let expenseItem;
-    // for(let i = 0 ; i < expenseData.length; i++){
-    //   if (expenseData[i].key == index){
-    //     expenseItem = expenseData[i];
-    //   }
-    // }
-    console.log(index)
-    console.log('expense', expenseData[index])
-
+    // Set the title and amount of the expense to be edited
     setExpenseTitle(expenseData[index].title);
     setExpense(expenseData[index].amount);
+    // Set the index of the expense to be edited
     setEditIndex(index);
-
   }
 
-//  const handleTotalExpense = () => {
-//   const sum = expenseData.reduce((total, item) => total + item.amount, 0);
-//   setTotalExpenditure(sum);
-// };
+  // Function to calculate total expense
+  const handleTotalExpense = () => {
+    let sum = 0;
+    // Iterate over each expense and add its amount to the sum
+    expenseData.forEach((item) => {
+      sum += item.amount;
+    });
+    // Set the total expenditure to the calculated sum
+    setTotalExpenditure(sum);
+  };
 
-const handleTotalExpense = () => {
-  let sum = 0;
-  expenseData.forEach((item) => {
-    sum += item.amount;
-  });
-  setTotalExpenditure(sum);
-  console.log(expenseData);
-  console.log(totalExpenditure);
-};
-
-  useEffect(() => {
-    handleTotalExpense();
-  }, [expenseData]);
-  
+  // Function to handle delete operation for expense
   const handleDelete = (key)=>{
+    // Show an alert before deleting the expense
     Alert.alert('Delete Expense', 'Are you sure ?', [
       {
         text: 'Cancel',
@@ -75,17 +58,17 @@ const handleTotalExpense = () => {
         style: 'cancel',
       },
       {text: 'OK', onPress: () => {
-        const newExpenseData = expenseData.filter((item,index)=>key != item.key)
-        console.log(newExpenseData)
+        // Filter out the expense to be deleted
+        const newExpenseData = expenseData.filter((item,index)=>key != index)
+        // Set the expense data to the new list
         setExpenseData(newExpenseData);
+        // Recalculate the total expense
         handleTotalExpense();
-        console.log(totalExpenditure)
-        console.log(expenseData)
       }},
     ]);
-   
   }
 
+  // Array of months
   const months = [
     { key: "1", value: "January" },
     { key: "2", value: "February" },
@@ -101,8 +84,7 @@ const handleTotalExpense = () => {
     { key: "12", value: "December" },
   ];
 
-  // console.log('data' , data)
-
+  // Function to get the current year and the next 9 years
   const getCurrentYear = () => {
     const currentYear = new Date().getFullYear()-1;
     const years = [];
@@ -114,23 +96,23 @@ const handleTotalExpense = () => {
 
   const years = getCurrentYear();
 
+  // Function to toggle dark mode
   function toggleSwitch() {
-    console.log(colorScheme)
     setIsDark(!isdark);
     Appearance.setColorScheme(isdark ? "dark" : "light");
   }
 
+  // Function to handle adding a new expense or editing an existing one
   const handleAddExpense = () => {
     const expenseValue = parseFloat(expense);
   
-    console.log("edit index", editIndex)
     if(editIndex !== null){
-      console.log("i am here")
+      // If an expense is being edited
       const newExpenseData = expenseData.map((item,index)=>{
         if(index === editIndex){
+          // Replace the expense being edited with the new values
           return {
             title: expenseTitle,
-            key:item.key,
             amount: expenseValue,
             Date: month+" "+year,
             Time: new Date().toLocaleTimeString()
@@ -139,41 +121,33 @@ const handleTotalExpense = () => {
         return item;
       })
       setExpenseData(newExpenseData);
-      console.log('new',newExpenseData)
-      console.log('old',expenseData)
-      // setTotalExpenditure(totalExpenditure - expenseData[editIndex].amount + expenseValue);
-      handleTotalExpense();
+      setTotalExpenditure(totalExpenditure - expenseData[editIndex].amount + expenseValue);
       setExpense(0);
       setExpenseTitle("");
       setEditIndex(null);
       
     }else{
+      // If a new expense is being added
       setExpenseData((data)=>{
         return [...data,{
           title: expenseTitle,
           amount: expenseValue,
-          key:generateKey(),
           Date: month+" "+year,
           Time: new Date().toLocaleTimeString()
         }]
       })
-      const generateKey = () => {
-        return Math.random().toString(36).substr(2, 9);
-      };
-
-      handleTotalExpense()
+      setTotalExpenditure(totalExpenditure + expenseValue);
       setExpense(0);
       setExpenseTitle("");
-    
-    
-    // console.log("Expense Data", expenseData);
     }
   };
 
-
-
+  // The render method returns the JSX that should be rendered
   return (
+    // The main container view
     <View style={isdark ? styleSheet.darkStyle : styleSheet.lightStyle}>
+
+      {/* Title */}
       <View style={{}}>
         <Text
           style={{
@@ -186,10 +160,11 @@ const handleTotalExpense = () => {
           Expenses Log
         </Text>
       </View>
-
+      
+      {/* Dark Mode Switch */}
       <View
         style={{
-          // flex: 1,
+          flex: 1,
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
@@ -213,15 +188,16 @@ const handleTotalExpense = () => {
           onValueChange={toggleSwitch}
           value={isdark}
         />
-        
       </View>
-      
+
+      {/* Month and Year Dropdowns */}
       <View
         style={{
           flexDirection: "row",
           color: "white",
         }}
       >
+        {/* Month Dropdown */}
         <SelectList
           setSelected={(val) => setMonth(val)}
           data={months}
@@ -232,9 +208,9 @@ const handleTotalExpense = () => {
           dropdownTextStyles={
             isdark ? styleSheet.dark.text : styleSheet.light.text
           }
-         
         />
 
+        {/* Year Dropdown */}
         <SelectList
           setSelected={(val) => setYear(val)}
           data={years}
@@ -247,7 +223,7 @@ const handleTotalExpense = () => {
           }
         />
       </View>
-
+      
       <View style={{
         width:"100%",
         margin: 20,
@@ -307,7 +283,6 @@ const handleTotalExpense = () => {
           margin: 10,
           width: "90%",
           alignItems: "center",
-          opacity: expenseTitle === '' || expense === 0 ? 0.5 : 1
         }}
         disabled={expenseTitle === '' || expense === 0}
         onPress = {()=>handleAddExpense()}
@@ -363,13 +338,13 @@ const handleTotalExpense = () => {
           expenseData.length != 0 ?
             expenseData.map((data, index) => {
               return (
-                <Expense data={data.title} amount={data.amount} date={data.Date} Itemkey={data.key}
-                index={index} time={data.Time} key={data.key} handleEdit={handleEdit} handleDelete= {handleDelete} />
+                <Expense data={data.title} amount={data.amount} date={data.Date} 
+                index={index} time={data.Time} key={index} handleEdit={handleEdit} handleDelete= {handleDelete} />
               );
             }) 
           :
           <Text style={{
-            // color:"white",
+            color:"white",
             fontSize:20,
             fontWeight:"bold",
             textAlign:"center",
