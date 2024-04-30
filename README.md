@@ -26,7 +26,8 @@ The Expense Manager App aims to provide users with a convenient way to track the
 ## Conclusion:
 The Expense Manager App provides a user-friendly solution for tracking expenses on mobile devices. By leveraging React Native and various UI components, the app offers essential features for managing expenses effectively. With its intuitive interface and responsive design, users can easily monitor their spending habits and make informed financial decisions.
 
-![expense logger](./assets/img1.jpeg){:height="300px" width="200px"}
-![expense logger](./assets/img2.jpeg){:height="300px" width="200px"}
-![expense logger](./assets/img3.jpeg){:height="300px" width="200px"}
-![expense logger](./assets/img4.jpeg){:height="300px" width="200px"}
+![expense logger](./assets/img1.jpeg =300x200)
+![expense logger](./assets/img2.jpeg =300x200)
+![expense logger](./assets/img3.jpeg =300x200)
+![expense logger](./assets/img4.jpeg =300x200)
+
